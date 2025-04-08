@@ -17,7 +17,7 @@ import java.util.Collections;
  * Date: 7 APR 2025
  * Description: A custom JavaFX Pane that displays points and computes the set of maximal points.
  *              Left mouse clicks add points, right mouse clicks remove points, and the maximal points
- *              are connected by red lines.
+ *              are connected by red lines. (Changed from black because they are more visible)
  */
 
 public class MaximalPointPane extends Pane {
@@ -93,6 +93,9 @@ public class MaximalPointPane extends Pane {
         }
     }
 
+    // Implemented to remove multiple print statements upon testing
+    private boolean hasPrintedDebug = false;
+
     // Computes the maximal points and draws red lines connecting them.
     private void computeAndDrawMaximalPoints() {
         // Remove previously drawn lines
@@ -100,6 +103,18 @@ public class MaximalPointPane extends Pane {
 
         ArrayList<MaximalPoint> maximalPoints = findMaximalPoints();
         Collections.sort(maximalPoints);
+
+        // Temp Test
+        // Created to verify Maximal points are found.
+        // Ran into issues where it would only read 2 Maximal Points
+
+        if (!hasPrintedDebug) {
+            System.out.println("Maximal points found:");
+            for (MaximalPoint mp : maximalPoints) {
+                System.out.println(mp);
+            }
+            hasPrintedDebug = true;
+        }
 
         // If no maximal points, nothing to draw
         if (maximalPoints.isEmpty()) {
@@ -117,7 +132,7 @@ public class MaximalPointPane extends Pane {
                 first.getX(),
                 first.getY()
         );
-        lineToFirst.setStroke(Color.BLACK);
+        lineToFirst.setStroke(Color.RED);
         getChildren().add(lineToFirst);
 
         // 2) Draw the “staircase” among consecutive maximal points
@@ -127,12 +142,12 @@ public class MaximalPointPane extends Pane {
 
             // Horizontal segment
             Line horizontal = new Line(p1.getX(), p1.getY(), p2.getX(), p1.getY());
-            horizontal.setStroke(Color.BLACK);
+            horizontal.setStroke(Color.RED);
             getChildren().add(horizontal);
 
             // Vertical segment
             Line vertical = new Line(p2.getX(), p1.getY(), p2.getX(), p2.getY());
-            vertical.setStroke(Color.BLACK);
+            vertical.setStroke(Color.RED);
             getChildren().add(vertical);
         }
 
@@ -144,11 +159,9 @@ public class MaximalPointPane extends Pane {
                 last.getX(),
                 paneHeight         // bottom edge
         );
-        lineFromLast.setStroke(Color.BLACK);
+        lineFromLast.setStroke(Color.RED);
         getChildren().add(lineFromLast);
     }
-
-
 
     // Determines the set of maximal points using the isBelowAndLeft method.
     private ArrayList<MaximalPoint> findMaximalPoints() {
